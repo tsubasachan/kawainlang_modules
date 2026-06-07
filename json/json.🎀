@@ -1,11 +1,29 @@
 // Módulo JSON em KawaiLang (100% Nativo e Estaticamente Tipado)
 
-// Função auxiliar para pular espaços em branco
+// Função auxiliar para pular espaços em branco e comentários
 🎀 🔢 pular_espacos(🔡 texto, 🔢 i) 🟢
     ➿ i < texto 📏 🟢
         🔡 char = texto[i]
         ❓ (char 🤝 " ") ↔ (char 🤝 "\n") ↔ (char 🤝 "\r") ↔ (char 🤝 "\t") 🟢
             i = i + 1
+        ✨ ❗ (char 🤝 "/") 🔗 (i + 1 < texto 📏) 🟢
+            🔡 next_char = texto[i + 1]
+            ❓ next_char 🤝 "/" 🟢
+                i = i + 2
+                ➿ (i < texto 📏) 🔗 (texto[i] 💔 "\n") 🟢
+                    i = i + 1
+                ✨
+            ✨ ❗ next_char 🤝 "*" 🟢
+                i = i + 2
+                ➿ (i + 1 < texto 📏) 🔗 (texto[i] 💔 "*") 🔗 (texto[i + 1] 💔 "/") 🟢
+                    i = i + 1
+                ✨
+                ❓ (i + 1 < texto 📏) 🟢
+                    i = i + 2
+                ✨
+            ✨ ❔ 🟢
+                🔙 i
+            ✨
         ✨ ❔ 🟢
             🔙 i
         ✨
@@ -126,9 +144,9 @@
     🔙 ler_numero_str(texto, i)
 ✨
 
-// Função principal de decodificação de JSON para Dicionário plano 🗂️(🔡, 🔡)
-🎀 🗂️(🔡, 🔡) decodificar(🔡 texto) 🟢
-    🗂️(🔡, 🔡) resultado = {}
+// Função principal de decodificação de JSON para Dicionário plano 📕(🔡, 🔡)
+🎀 📕(🔡, 🔡) decodificar(🔡 texto) 🟢
+    📕(🔡, 🔡) resultado = {}
     
     🔢 i = pular_espacos(texto, 0)
     

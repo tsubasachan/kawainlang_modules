@@ -1,6 +1,9 @@
 {
+  // Nome do projeto
   "nome": "KawaiLang",
+  /* Versão atual da especificação
+     e compatibilidade */
   "versao": 1.0,
-  "ativa": true,
+  "ativa": true, // Ativo por padrão
   "criador": null
 }

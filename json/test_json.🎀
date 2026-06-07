@@ -11,7 +11,7 @@
 💬 conteudo
 
 // Decodifica a string JSON para um dicionário de strings
-🗂️(🔡, 🔡) dados = decodificar(conteudo)
+📕(🔡, 🔡) dados = decodificar(conteudo)
 
 💬 "Dicionário decodificado gerado:"
 💬 dados
