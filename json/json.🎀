@@ -1,0 +1,185 @@
+// Módulo JSON em KawaiLang (100% Nativo e Estaticamente Tipado)
+
+// Função auxiliar para pular espaços em branco
+🎀 🔢 pular_espacos(🔡 texto, 🔢 i) 🟢
+    ➿ i < texto 📏 🟢
+        🔡 char = texto[i]
+        ❓ (char 🤝 " ") ↔ (char 🤝 "\n") ↔ (char 🤝 "\r") ↔ (char 🤝 "\t") 🟢
+            i = i + 1
+        ✨ ❔ 🟢
+            🔙 i
+        ✨
+    ✨
+    🔙 i
+✨
+
+// Função para decodificar strings do JSON
+🎀 📥(🔡, 🔢) ler_string(🔡 texto, 🔢 i) 🟢
+    i = i + 1
+    🔡 resultado = ""
+    ➿ i < texto 📏 🟢
+        🔡 char = texto[i]
+        ❓ char 🤝 "\"" 🟢
+            🔙 (resultado, i + 1)
+        ✨
+        ❓ char 🤝 "\\" 🟢
+            i = i + 1
+            🔡 escaped = texto[i]
+            resultado = resultado + escaped
+        ✨ ❔ 🟢
+            resultado = resultado + char
+        ✨
+        i = i + 1
+    ✨
+    🔙 (resultado, i)
+✨
+
+// Função para decodificar números como string bruta
+🎀 📥(🔡, 🔢) ler_numero_str(🔡 texto, 🔢 i) 🟢
+    🔡 num_str = ""
+    ➿ i < texto 📏 🟢
+        🔡 char = texto[i]
+        ❓ (char 🤝 "-") ↔ (char 🤝 ".") ↔ (char 🤝 "0") ↔ (char 🤝 "1") ↔ (char 🤝 "2") ↔ (char 🤝 "3") ↔ (char 🤝 "4") ↔ (char 🤝 "5") ↔ (char 🤝 "6") ↔ (char 🤝 "7") ↔ (char 🤝 "8") ↔ (char 🤝 "9") 🟢
+            num_str = num_str + char
+            i = i + 1
+        ✨ ❔ 🟢
+            🔙 (num_str, i)
+        ✨
+    ✨
+    🔙 (num_str, i)
+✨
+
+// Função auxiliar recursiva que lê um valor JSON e o retorna convertido em String.
+🎀 📥(🔡, 🔢) parse_valor_bruto(🔡 texto, 🔢 i) 🟢
+    i = pular_espacos(texto, i)
+    ❓ (i 🤝 texto 📏) ↔ (i > texto 📏) 🟢
+        🔙 ("", i)
+    ✨
+
+    🔡 char = texto[i]
+
+    // Se for String
+    ❓ char 🤝 "\"" 🟢
+        🔙 ler_string(texto, i)
+    ✨
+
+    // Se for Dicionário/Objeto
+    ❓ char 🤝 "{" 🟢
+        🔢 inicio = i
+        i = i + 1
+        🔢 braces = 1
+        ➿ (i < texto 📏) 🔗 (braces > 0) 🟢
+            🔡 c = texto[i]
+            ❓ c 🤝 "{" 🟢
+                braces = braces + 1
+            ✨
+            ❓ c 🤝 "}" 🟢
+                braces = braces - 1
+            ✨
+            i = i + 1
+        ✨
+        🔡 sub = ""
+        🔢 idx = inicio
+        ➿ idx < i 🟢
+            sub = sub + texto[idx]
+            idx = idx + 1
+        ✨
+        🔙 (sub, i)
+    ✨
+
+    // Se for Lista/Array
+    ❓ char 🤝 "[" 🟢
+        🔢 inicio = i
+        i = i + 1
+        🔢 brackets = 1
+        ➿ (i < texto 📏) 🔗 (brackets > 0) 🟢
+            🔡 c = texto[i]
+            ❓ c 🤝 "[" 🟢
+                brackets = brackets + 1
+            ✨
+            ❓ c 🤝 "]" 🟢
+                brackets = brackets - 1
+            ✨
+            i = i + 1
+        ✨
+        🔡 sub = ""
+        🔢 idx = inicio
+        ➿ idx < i 🟢
+            sub = sub + texto[idx]
+            idx = idx + 1
+        ✨
+        🔙 (sub, i)
+    ✨
+
+    // Se for Booleanos ou Nulos (true, false, null)
+    ❓ char 🤝 "t" 🟢
+        🔙 ("true", i + 4)
+    ✨
+    ❓ char 🤝 "f" 🟢
+        🔙 ("false", i + 5)
+    ✨
+    ❓ char 🤝 "n" 🟢
+        🔙 ("null", i + 4)
+    ✨
+
+    // Caso contrário, lê como número
+    🔙 ler_numero_str(texto, i)
+✨
+
+// Função principal de decodificação de JSON para Dicionário plano 🗂️(🔡, 🔡)
+🎀 🗂️(🔡, 🔡) decodificar(🔡 texto) 🟢
+    🗂️(🔡, 🔡) resultado = {}
+    
+    🔢 i = pular_espacos(texto, 0)
+    
+    ❓ (i 🤝 texto 📏) ↔ (i > texto 📏) 🟢
+        🔙 resultado
+    ✨
+
+    ❓ texto[i] 💔 "{" 🟢
+        🔙 resultado
+    ✨
+    
+    i = i + 1 // Pula o '{'
+    i = pular_espacos(texto, i)
+
+    ❓ texto[i] 🤝 "}" 🟢
+        🔙 resultado
+    ✨
+
+    ➿ i < texto 📏 🟢
+        i = pular_espacos(texto, i)
+        // Se a chave for String
+        ❓ texto[i] 🤝 "\"" 🟢
+            📥(🔡, 🔢) chave_res = ler_string(texto, i)
+            🔡 chave = chave_res[0]
+            i = chave_res[1]
+            
+            i = pular_espacos(texto, i)
+            ❓ texto[i] 🤝 ":" 🟢
+                i = i + 1
+            ✨
+            
+            i = pular_espacos(texto, i)
+            📥(🔡, 🔢) val_res = parse_valor_bruto(texto, i)
+            🔡 valor = val_res[0]
+            i = val_res[1]
+            
+            resultado[chave] = valor
+            
+            i = pular_espacos(texto, i)
+            ❓ texto[i] 🤝 "," 🟢
+                i = i + 1
+            ✨ ❗ texto[i] 🤝 "}" 🟢
+                i = texto 📏 // encerra o loop com segurança
+            ✨ ❔ 🟢
+                i = i + 1 // consome caractere inesperado
+            ✨
+        ✨ ❔ 🟢
+            // Ignora se não for aspas de chave
+            i = i + 1
+        ✨
+    ✨
+    
+    🔙 resultado
+✨

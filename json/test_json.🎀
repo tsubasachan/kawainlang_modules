@@ -1,0 +1,38 @@
+// Importa o módulo de arquivos nativo
+📚 "std/arquivos.🎀"
+
+// Importa o módulo de JSON da mesma pasta
+📚 "json.🎀"
+
+// Carrega o arquivo dados.json usando a função nativa 📖
+🔡 conteudo = 📖("modulos/json/dados.json")
+
+💬 "Conteúdo original lido do JSON:"
+💬 conteudo
+
+// Decodifica a string JSON para um dicionário de strings
+🗂️(🔡, 🔡) dados = decodificar(conteudo)
+
+💬 "Dicionário decodificado gerado:"
+💬 dados
+
+// Acessa as chaves do dicionário e faz o typecast quando necessário
+💬 "Lendo chaves individuais:"
+💬 "Nome:"
+💬 dados["nome"]
+
+💬 "Versão (bruta como texto):"
+💬 dados["versao"]
+
+// Podemos converter as strings do JSON para os tipos da linguagem
+🧪 versao_num = dados["versao"] ➡️ 🧪
+💬 "Versão (convertida para número decimal 🧪):"
+💬 versao_num
+
+// Para booleanos, comparamos a string bruta com "true"
+✅ ativa_bool = 👎
+❓ dados["ativa"] 🤝 "true" 🟢
+    ativa_bool = 👍
+✨
+💬 "Ativa (convertida para booleano ✅):"
+💬 ativa_bool
