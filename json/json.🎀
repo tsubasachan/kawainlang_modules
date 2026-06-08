@@ -201,3 +201,23 @@
     
     🔙 resultado
 ✨
+
+// Função para codificar um dicionário para uma string JSON
+🎀 🔡 codificar(📕(🔡, 🔡) dados) 🟢
+    🔡 resultado = "{"
+    ✅ primeira = 👍
+    
+    ➰ 🔡 chave 🧲 dados 🟢
+        ❓ 🚫 primeira 🟢
+            resultado = resultado + ", "
+        ✨ ❔ 🟢
+            primeira = 👎
+        ✨
+        🔡 valor = dados[chave]
+        resultado = resultado + "\"" + chave + "\": \"" + valor + "\""
+    ✨
+    
+    resultado = resultado + "}"
+    🔙 resultado
+✨
+
