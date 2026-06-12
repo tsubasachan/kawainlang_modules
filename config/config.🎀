@@ -1,0 +1,101 @@
+📚 "std/os.🎀"
+📚 "std/arquivos.🎀"
+
+🎀 ✅ config_e_espaco(🔡 char) 🟢
+    🔙 (char 🤝 " ") ↔ (char 🤝 "\n") ↔ (char 🤝 "\r") ↔ (char 🤝 "\t")
+✨
+
+🎀 🔡 config_trim(🔡 texto) 🟢
+    🔢 inicio = 0
+    🔢 fim = texto 📏
+
+    ➿ (inicio < fim) 🔗 config_e_espaco(texto[inicio]) 🟢
+        inicio = inicio + 1
+    ✨
+
+    ➿ (fim > inicio) 🔗 config_e_espaco(texto[fim - 1]) 🟢
+        fim = fim - 1
+    ✨
+
+    🔙 texto ✂️ inicio 👉 fim
+✨
+
+🎀 🔡 config_env(🔡 nome, 🔡 padrao) 🟢
+    🔡 valor = ⚙️ nome
+    ❓ valor 📏 🤝 0 🟢
+        🔙 padrao
+    ✨
+    🔙 valor
+✨
+
+🎀 🔢 config_env_int(🔡 nome, 🔢 padrao) 🟢
+    🔡 valor = config_env(nome, "")
+    ❓ valor 📏 🤝 0 🟢
+        🔙 padrao
+    ✨
+    🔙 valor ➡️ 🔢
+✨
+
+🎀 ✅ config_bool_str(🔡 valor, ✅ padrao) 🟢
+    🔡 v = config_trim(valor) 🔤
+    ❓ (v 🤝 "true") ↔ (v 🤝 "1") ↔ (v 🤝 "yes") ↔ (v 🤝 "on") ↔ (v 🤝 "sim") 🟢
+        🔙 👍
+    ✨
+    ❓ (v 🤝 "false") ↔ (v 🤝 "0") ↔ (v 🤝 "no") ↔ (v 🤝 "off") ↔ (v 🤝 "nao") ↔ (v 🤝 "não") 🟢
+        🔙 👎
+    ✨
+    🔙 padrao
+✨
+
+🎀 ✅ config_env_bool(🔡 nome, ✅ padrao) 🟢
+    🔡 valor = config_env(nome, "")
+    ❓ valor 📏 🤝 0 🟢
+        🔙 padrao
+    ✨
+    🔙 config_bool_str(valor, padrao)
+✨
+
+🎀 📥(🔡, 🔡) config_parse_linha(🔡 linha) 🟢
+    🔡 limpa = config_trim(linha)
+    ❓ limpa 📏 🤝 0 🟢
+        🔙 ("", "")
+    ✨
+    ❓ limpa[0] 🤝 "#" 🟢
+        🔙 ("", "")
+    ✨
+
+    🔢 igual = 0
+    ➿ (igual < limpa 📏) 🔗 (limpa[igual] 💔 "=") 🟢
+        igual = igual + 1
+    ✨
+
+    ❓ igual 🤝 limpa 📏 🟢
+        🔙 ("", "")
+    ✨
+
+    🔡 chave = config_trim(limpa ✂️ 0 👉 igual)
+    🔡 valor = config_trim(limpa ✂️ (igual + 1) 👉)
+    🔙 (chave, valor)
+✨
+
+🎀 📕(🔡, 🔡) config_parse_env(🔡 conteudo) 🟢
+    📕(🔡, 🔡) resultado = {}
+    📦🔡 linhas = conteudo 🪓 "\n"
+    🔢 i = 0
+
+    ➿ i < linhas 📏 🟢
+        📥(🔡, 🔡) par = config_parse_linha(linhas[i])
+        🔡 chave = par[0]
+        ❓ chave 📏 > 0 🟢
+            resultado[chave] = par[1]
+        ✨
+        i = i + 1
+    ✨
+
+    🔙 resultado
+✨
+
+🎀 📕(🔡, 🔡) config_load_env(🔡 caminho) 🟢
+    🔡 conteudo = 📖 caminho
+    🔙 config_parse_env(conteudo)
+✨

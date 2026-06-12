@@ -1,0 +1,15 @@
+name = "kawainlang_modules"
+version = "0.8.0"
+description = "Biblioteca padrao e modulos oficiais da KawaiLang"
+license = "MIT"
+
+[compat]
+kawailang = ">=0.1.93"
+
+[modules]
+config = "config/kawai.mod.toml"
+http = "http/kawai.mod.toml"
+json = "json/kawai.mod.toml"
+kawai_web = "kawai_web/kawai.mod.toml"
+log = "log/kawai.mod.toml"
+rede = "rede/kawai.mod.toml"

@@ -1,0 +1,11 @@
+name = "std/log"
+version = "0.1.0"
+description = "Logging estruturado textual para KawaiLang"
+entry = "log.🎀"
+license = "MIT"
+
+[files]
+kawai = ["log.🎀"]
+
+[compat]
+kawailang = ">=0.1.90"

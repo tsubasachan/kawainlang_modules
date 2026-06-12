@@ -1,0 +1,11 @@
+name = "kawai/web"
+version = "0.2.0"
+description = "KawaiWeb, framework web minimalista com templates HTML para KawaiLang"
+entry = "web.🎀"
+license = "MIT"
+
+[files]
+kawai = ["web.🎀"]
+
+[compat]
+kawailang = ">=0.1.93"

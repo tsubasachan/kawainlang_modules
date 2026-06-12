@@ -1,0 +1,8 @@
+// Módulo FFI para sockets TCP POSIX na KawaiLang
+🔌 🔢 kl_tcp_connect(🔡 host, 🔢 port)
+🔌 🔢 kl_tcp_bind(🔡 host, 🔢 port)
+🔌 🔢 kl_tcp_listen(🔢 server_socket, 🔢 backlog)
+🔌 🔢 kl_tcp_accept(🔢 server_socket)
+🔌 🔢 kl_tcp_send(🔢 socket_fd, 🔡 data)
+🔌 🔡 kl_tcp_recv(🔢 socket_fd, 🔢 max_bytes)
+🔌 🔢 kl_tcp_close(🔢 socket_fd)

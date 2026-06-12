@@ -1,0 +1,74 @@
+📚 "std/os.🎀"
+
+🎀 🔡 log_normalizar_nivel(🔡 nivel) 🟢
+    🔙 nivel 🔤
+✨
+
+🎀 🔡 log_escape(🔡 texto) 🟢
+    🔡 resultado = ""
+    🔢 i = 0
+
+    ➿ i < texto 📏 🟢
+        🔡 char = texto[i]
+        ❓ char 🤝 "\"" 🟢
+            resultado = resultado + "\\\""
+        ✨ ❗ char 🤝 "\n" 🟢
+            resultado = resultado + "\\n"
+        ✨ ❗ char 🤝 "\r" 🟢
+            resultado = resultado + "\\r"
+        ✨ ❔ 🟢
+            resultado = resultado + char
+        ✨
+        i = i + 1
+    ✨
+
+    🔙 resultado
+✨
+
+🎀 🔡 log_campo(🔡 chave, 🔡 valor) 🟢
+    🔙 chave + "=\"" + log_escape(valor) + "\""
+✨
+
+🎀 🔡 log_formatar(🔡 nivel, 🔡 mensagem) 🟢
+    🔙 "level=" + log_normalizar_nivel(nivel) + " " + log_campo("message", mensagem)
+✨
+
+🎀 🔡 log_formatar_evento(🔡 nivel, 🔡 evento, 📕(🔡, 🔡) contexto) 🟢
+    🔡 linha = "level=" + log_normalizar_nivel(nivel) + " " + log_campo("event", evento)
+
+    ➰ 🔡 chave 🧲 contexto 🟢
+        linha = linha + " " + log_campo(chave, contexto[chave])
+    ✨
+
+    🔙 linha
+✨
+
+🎀 🔡 log_agora() 🟢
+    🔙 📅
+✨
+
+🎀 🔢 log_emitir(🔡 nivel, 🔡 mensagem) 🟢
+    💬 log_formatar(nivel, mensagem)
+    🔙 0
+✨
+
+🎀 🔢 log_evento(🔡 nivel, 🔡 evento, 📕(🔡, 🔡) contexto) 🟢
+    💬 log_formatar_evento(nivel, evento, contexto)
+    🔙 0
+✨
+
+🎀 🔢 log_debug(🔡 mensagem) 🟢
+    🔙 log_emitir("debug", mensagem)
+✨
+
+🎀 🔢 log_info(🔡 mensagem) 🟢
+    🔙 log_emitir("info", mensagem)
+✨
+
+🎀 🔢 log_warn(🔡 mensagem) 🟢
+    🔙 log_emitir("warn", mensagem)
+✨
+
+🎀 🔢 log_error(🔡 mensagem) 🟢
+    🔙 log_emitir("error", mensagem)
+✨

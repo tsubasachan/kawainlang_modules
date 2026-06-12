@@ -1,0 +1,11 @@
+name = "std/config"
+version = "0.1.0"
+description = "Configuracao e leitura simples de .env para KawaiLang"
+entry = "config.🎀"
+license = "MIT"
+
+[files]
+kawai = ["config.🎀"]
+
+[compat]
+kawailang = ">=0.1.91"

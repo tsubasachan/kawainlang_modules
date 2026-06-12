@@ -1,0 +1,111 @@
+📚 "std/config.🎀"
+📚 "std/http.🎀"
+📚 "std/json.🎀"
+📚 "std/log.🎀"
+
+🎀 🔡 web_host() 🟢
+    🔙 config_env("KAWAIWEB_HOST", "127.0.0.1")
+✨
+
+🎀 🔢 web_port() 🟢
+    🔙 config_env_int("KAWAIWEB_PORT", 8080)
+✨
+
+🎀 🔢 web_server(🔡 host, 🔢 porta) 🟢
+    log_info("KawaiWeb iniciando em " + host + ":" + porta)
+    🔙 http_server(host, porta)
+✨
+
+🎀 🔢 web_server_env() 🟢
+    🔙 web_server(web_host(), web_port())
+✨
+
+🎀 🔢 web_accept(🔢 servidor) 🟢
+    🔙 http_accept(servidor)
+✨
+
+🎀 📕(🔡, 🔡) web_request(🔢 cliente) 🟢
+    🔡 bruto = http_recv(cliente)
+    📕(🔡, 🔡) req = http_parse_request(bruto)
+    📕(🔡, 🔡) ctx = {"method": req["method"], "path": req["path"]}
+    log_evento("info", "request", ctx)
+    🔙 req
+✨
+
+🎀 ✅ web_route(📕(🔡, 🔡) req, 🔡 method, 🔡 pattern) 🟢
+    🔙 (req["method"] 🤝 method) 🔗 http_match_path(pattern, req["path"])
+✨
+
+🎀 🔡 web_param(📕(🔡, 🔡) req, 🔡 pattern, 🔡 nome) 🟢
+    🔙 http_path_param(pattern, req["path"], nome)
+✨
+
+🎀 📕(🔡, 🔡) web_query(📕(🔡, 🔡) req) 🟢
+    🔙 http_query(req)
+✨
+
+🎀 🔡 web_header(📕(🔡, 🔡) req, 🔡 nome) 🟢
+    🔙 http_header(req, nome)
+✨
+
+🎀 🔡 web_text(🔡 body) 🟢
+    🔙 http_response(200, "text/plain", body)
+✨
+
+🎀 🔡 web_json(📕(🔡, 🔡) dados) 🟢
+    🔙 http_response(200, "application/json", codificar(dados))
+✨
+
+🎀 🔡 web_escape_html(🔡 texto) 🟢
+    🔡 resultado = texto
+    resultado = resultado 🔄 "&" ➡ "&amp;"
+    resultado = resultado 🔄 "<" ➡ "&lt;"
+    resultado = resultado 🔄 ">" ➡ "&gt;"
+    resultado = resultado 🔄 "\"" ➡ "&quot;"
+    resultado = resultado 🔄 "'" ➡ "&#39;"
+    🔙 resultado
+✨
+
+🎀 🔡 web_template(🔡 template, 📕(🔡, 🔡) contexto) 🟢
+    🔡 html = template
+    ➰ 🔡 chave 🧲 contexto 🟢
+        🔡 marcador = "{" + chave + "}"
+        🔡 valor = web_escape_html(contexto[chave])
+        html = html 🔄 marcador ➡ valor
+    ✨
+    🔙 html
+✨
+
+🎀 🔡 web_html(🔡 body) 🟢
+    🔙 http_response(200, "text/html; charset=utf-8", body)
+✨
+
+🎀 🔡 web_response(🔢 status, 🔡 content_type, 🔡 body) 🟢
+    🔙 http_response(status, content_type, body)
+✨
+
+🎀 🔢 web_send(🔢 cliente, 🔡 response) 🟢
+    🔙 http_send(cliente, response)
+✨
+
+🎀 🔢 web_send_text(🔢 cliente, 🔢 status, 🔡 body) 🟢
+    🔙 http_send_text(cliente, status, "text/plain", body)
+✨
+
+🎀 🔢 web_send_json(🔢 cliente, 🔢 status, 📕(🔡, 🔡) dados) 🟢
+    🔙 http_send_text(cliente, status, "application/json", codificar(dados))
+✨
+
+🎀 🔢 web_send_html(🔢 cliente, 🔢 status, 🔡 body) 🟢
+    🔙 http_send_text(cliente, status, "text/html; charset=utf-8", body)
+✨
+
+🎀 🔢 web_not_found(🔢 cliente) 🟢
+    🔙 web_send_text(cliente, 404, "Nao encontrado")
+✨
+
+🎀 🔢 web_close(🔢 cliente, 🔢 servidor) 🟢
+    🔢 cliente_fechado = kl_tcp_close(cliente)
+    🔢 servidor_fechado = kl_tcp_close(servidor)
+    🔙 0
+✨

@@ -1,0 +1,8 @@
+name = "std/json"
+version = "0.1.0"
+description = "Manipulacao JSON para KawaiLang"
+entry = "json.🎀"
+license = "MIT"
+
+[compat]
+kawailang = ">=0.1.84"

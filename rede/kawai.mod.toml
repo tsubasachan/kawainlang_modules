@@ -1,0 +1,12 @@
+name = "std/rede"
+version = "0.1.0"
+description = "Sockets TCP POSIX para KawaiLang"
+entry = "rede.🎀"
+license = "MIT"
+
+[ffi]
+python = "rede.py"
+c = "rede.c"
+
+[compat]
+kawailang = ">=0.1.84"

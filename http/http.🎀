@@ -1,2 +1,263 @@
 // Módulo FFI para requisições HTTP na KawaiLang
+📚 "server.🎀"
+
 🔌 🔡 kl_http_get(🔡 url)
+
+🎀 ✅ http_e_espaco(🔡 char) 🟢
+    🔙 (char 🤝 " ") ↔ (char 🤝 "\n") ↔ (char 🤝 "\r") ↔ (char 🤝 "\t")
+✨
+
+🎀 🔡 http_trim(🔡 texto) 🟢
+    🔢 inicio = 0
+    🔢 fim = texto 📏
+
+    ➿ (inicio < fim) 🔗 http_e_espaco(texto[inicio]) 🟢
+        inicio = inicio + 1
+    ✨
+
+    ➿ (fim > inicio) 🔗 http_e_espaco(texto[fim - 1]) 🟢
+        fim = fim - 1
+    ✨
+
+    🔙 texto ✂️ inicio 👉 fim
+✨
+
+🎀 🔡 http_hex_para_char(🔡 hex) 🟢
+    🔡 h = hex 🔠
+    ❓ h 🤝 "20" 🟢 🔙 " " ✨
+    ❓ h 🤝 "21" 🟢 🔙 "!" ✨
+    ❓ h 🤝 "22" 🟢 🔙 "\"" ✨
+    ❓ h 🤝 "23" 🟢 🔙 "#" ✨
+    ❓ h 🤝 "24" 🟢 🔙 "$" ✨
+    ❓ h 🤝 "25" 🟢 🔙 "%" ✨
+    ❓ h 🤝 "26" 🟢 🔙 "&" ✨
+    ❓ h 🤝 "27" 🟢 🔙 "'" ✨
+    ❓ h 🤝 "28" 🟢 🔙 "(" ✨
+    ❓ h 🤝 "29" 🟢 🔙 ")" ✨
+    ❓ h 🤝 "2A" 🟢 🔙 "*" ✨
+    ❓ h 🤝 "2B" 🟢 🔙 "+" ✨
+    ❓ h 🤝 "2C" 🟢 🔙 "," ✨
+    ❓ h 🤝 "2D" 🟢 🔙 "-" ✨
+    ❓ h 🤝 "2E" 🟢 🔙 "." ✨
+    ❓ h 🤝 "2F" 🟢 🔙 "/" ✨
+    ❓ h 🤝 "3A" 🟢 🔙 ":" ✨
+    ❓ h 🤝 "3B" 🟢 🔙 ";" ✨
+    ❓ h 🤝 "3D" 🟢 🔙 "=" ✨
+    ❓ h 🤝 "3F" 🟢 🔙 "?" ✨
+    ❓ h 🤝 "40" 🟢 🔙 "@" ✨
+    ❓ h 🤝 "5B" 🟢 🔙 "[" ✨
+    ❓ h 🤝 "5D" 🟢 🔙 "]" ✨
+    ❓ h 🤝 "7B" 🟢 🔙 "{" ✨
+    ❓ h 🤝 "7D" 🟢 🔙 "}" ✨
+    🔙 "%" + hex
+✨
+
+🎀 🔡 http_percent_decode(🔡 texto) 🟢
+    🔡 resultado = ""
+    🔢 i = 0
+
+    ➿ i < texto 📏 🟢
+        🔡 char = texto[i]
+        ❓ (char 🤝 "%") 🔗 (i + 2 < texto 📏) 🟢
+            🔡 hex = texto ✂️ (i + 1) 👉 (i + 3)
+            resultado = resultado + http_hex_para_char(hex)
+            i = i + 3
+        ✨ ❗ char 🤝 "+" 🟢
+            resultado = resultado + " "
+            i = i + 1
+        ✨ ❔ 🟢
+            resultado = resultado + char
+            i = i + 1
+        ✨
+    ✨
+
+    🔙 resultado
+✨
+
+🎀 📕(🔡, 🔡) http_parse_query(🔡 query) 🟢
+    📕(🔡, 🔡) resultado = {}
+    🔡 limpa = query
+
+    ❓ (limpa 📏 > 0) 🔗 (limpa[0] 🤝 "?") 🟢
+        limpa = limpa ✂️ 1 👉
+    ✨
+
+    ❓ limpa 📏 🤝 0 🟢
+        🔙 resultado
+    ✨
+
+    📦🔡 pares = limpa 🪓 "&"
+    🔢 i = 0
+    ➿ i < pares 📏 🟢
+        🔡 par = pares[i]
+        ❓ par 📏 > 0 🟢
+            📦🔡 partes = par 🪓 "="
+            🔡 chave = http_percent_decode(partes[0])
+            🔡 valor = ""
+            ❓ partes 📏 > 1 🟢
+                valor = http_percent_decode(partes[1])
+            ✨
+            resultado[chave] = valor
+        ✨
+        i = i + 1
+    ✨
+
+    🔙 resultado
+✨
+
+🎀 ✅ http_route(📕(🔡, 🔡) req, 🔡 method, 🔡 path) 🟢
+    🔙 (req["method"] 🤝 method) 🔗 (req["path"] 🤝 path)
+✨
+
+🎀 📕(🔡, 🔡) http_query(📕(🔡, 🔡) req) 🟢
+    🔙 http_parse_query(req["query"])
+✨
+
+🎀 🔡 http_header(📕(🔡, 🔡) req, 🔡 nome) 🟢
+    🔡 nome_normalizado = nome 🔤
+    🔡 chave = "header:" + nome_normalizado
+    🔡 valor = req[chave]
+    🔙 valor
+✨
+
+🎀 ✅ http_match_path(🔡 pattern, 🔡 path) 🟢
+    📦🔡 partes_pattern = pattern 🪓 "/"
+    📦🔡 partes_path = path 🪓 "/"
+
+    ❓ partes_pattern 📏 💔 partes_path 📏 🟢
+        🔙 👎
+    ✨
+
+    🔢 i = 0
+    ➿ i < partes_pattern 📏 🟢
+        🔡 esperado = partes_pattern[i]
+        🔡 recebido = partes_path[i]
+        ❓ (esperado 📏 > 0) 🔗 (esperado[0] 🤝 ":") 🟢
+            i = i + 1
+        ✨ ❗ esperado 🤝 recebido 🟢
+            i = i + 1
+        ✨ ❔ 🟢
+            🔙 👎
+        ✨
+    ✨
+
+    🔙 👍
+✨
+
+🎀 🔡 http_path_param(🔡 pattern, 🔡 path, 🔡 nome) 🟢
+    📦🔡 partes_pattern = pattern 🪓 "/"
+    📦🔡 partes_path = path 🪓 "/"
+
+    ❓ partes_pattern 📏 💔 partes_path 📏 🟢
+        🔙 ""
+    ✨
+
+    🔢 i = 0
+    ➿ i < partes_pattern 📏 🟢
+        🔡 esperado = partes_pattern[i]
+        ❓ (esperado 📏 > 1) 🔗 (esperado[0] 🤝 ":") 🟢
+            🔡 param_nome = esperado ✂️ 1 👉
+            ❓ param_nome 🤝 nome 🟢
+                🔙 http_percent_decode(partes_path[i])
+            ✨
+        ✨
+        i = i + 1
+    ✨
+
+    🔙 ""
+✨
+
+🎀 📕(🔡, 🔡) http_parse_url(🔡 url) 🟢
+    📕(🔡, 🔡) resultado = {
+        "scheme": "",
+        "host": "",
+        "port": "",
+        "path": "/",
+        "query": "",
+        "fragment": ""
+    }
+
+    🔡 sem_fragmento = url
+    📦🔡 frag_partes = url 🪓 "#"
+    ❓ frag_partes 📏 > 1 🟢
+        sem_fragmento = frag_partes[0]
+        resultado["fragment"] = frag_partes[1]
+    ✨
+
+    🔡 resto = sem_fragmento
+    📦🔡 scheme_partes = sem_fragmento 🪓 "://"
+    ❓ scheme_partes 📏 > 1 🟢
+        resultado["scheme"] = scheme_partes[0]
+        resto = scheme_partes[1]
+    ✨
+
+    📦🔡 query_partes = resto 🪓 "?"
+    🔡 antes_query = query_partes[0]
+    ❓ query_partes 📏 > 1 🟢
+        resultado["query"] = query_partes[1]
+    ✨
+
+    🔢 slash = 0
+    ➿ (slash < antes_query 📏) 🔗 (antes_query[slash] 💔 "/") 🟢
+        slash = slash + 1
+    ✨
+
+    🔡 host_port = antes_query
+    ❓ slash < antes_query 📏 🟢
+        host_port = antes_query ✂️ 0 👉 slash
+        resultado["path"] = antes_query ✂️ slash 👉
+    ✨
+
+    📦🔡 host_partes = host_port 🪓 ":"
+    resultado["host"] = host_partes[0]
+    ❓ host_partes 📏 > 1 🟢
+        resultado["port"] = host_partes[1]
+    ✨
+
+    🔙 resultado
+✨
+
+🎀 📕(🔡, 🔡) http_parse_request(🔡 bruto) 🟢
+    📕(🔡, 🔡) resultado = {
+        "method": "",
+        "target": "",
+        "path": "",
+        "query": "",
+        "version": "",
+        "body": ""
+    }
+
+    📦🔡 corpo_partes = bruto 🪓 "\r\n\r\n"
+    🔡 cabecalhos = corpo_partes[0]
+    ❓ corpo_partes 📏 > 1 🟢
+        resultado["body"] = corpo_partes[1]
+    ✨
+
+    📦🔡 linhas = cabecalhos 🪓 "\r\n"
+    ❓ linhas 📏 🤝 0 🟢
+        🔙 resultado
+    ✨
+
+    📦🔡 primeira = linhas[0] 🪓 " "
+    ❓ primeira 📏 > 0 🟢 resultado["method"] = primeira[0] ✨
+    ❓ primeira 📏 > 1 🟢 resultado["target"] = primeira[1] ✨
+    ❓ primeira 📏 > 2 🟢 resultado["version"] = primeira[2] ✨
+
+    📕(🔡, 🔡) url_info = http_parse_url(resultado["target"])
+    resultado["path"] = url_info["path"]
+    resultado["query"] = url_info["query"]
+
+    🔢 i = 1
+    ➿ i < linhas 📏 🟢
+        🔡 linha = linhas[i]
+        📦🔡 header_partes = linha 🪓 ":"
+        ❓ header_partes 📏 > 1 🟢
+            🔡 nome = http_trim(header_partes[0]) 🔤
+            🔡 valor = http_trim(header_partes[1])
+            resultado["header:" + nome] = valor
+        ✨
+        i = i + 1
+    ✨
+
+    🔙 resultado
+✨

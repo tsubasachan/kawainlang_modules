@@ -1,0 +1,53 @@
+📚 "std/rede.🎀"
+
+🎀 🔢 http_server(🔡 host, 🔢 porta) 🟢
+    🔢 servidor = kl_tcp_bind(host, porta)
+    ❓ servidor 👈 0 🟢
+        🔙 servidor
+    ✨
+
+    🔢 status = kl_tcp_listen(servidor, 16)
+    ❓ status 👈 0 🟢
+        🔢 fechado = kl_tcp_close(servidor)
+        🔙 -1
+    ✨
+
+    🔙 servidor
+✨
+
+🎀 🔢 http_accept(🔢 servidor) 🟢
+    🔙 kl_tcp_accept(servidor)
+✨
+
+🎀 🔡 http_recv(🔢 cliente) 🟢
+    🔙 kl_tcp_recv(cliente, 8192)
+✨
+
+🎀 🔡 http_status_text(🔢 status) 🟢
+    ❓ status 🤝 200 🟢 🔙 "OK" ✨
+    ❓ status 🤝 201 🟢 🔙 "Created" ✨
+    ❓ status 🤝 204 🟢 🔙 "No Content" ✨
+    ❓ status 🤝 400 🟢 🔙 "Bad Request" ✨
+    ❓ status 🤝 404 🟢 🔙 "Not Found" ✨
+    ❓ status 🤝 500 🟢 🔙 "Internal Server Error" ✨
+    🔙 "OK"
+✨
+
+🎀 🔡 http_response(🔢 status, 🔡 content_type, 🔡 body) 🟢
+    🔡 response = "HTTP/1.1 " + status + " " + http_status_text(status) + "\r\n"
+    response = response + "Content-Type: " + content_type + "\r\n"
+    response = response + "Content-Length: " + (body 📏) + "\r\n"
+    response = response + "Connection: close\r\n"
+    response = response + "\r\n"
+    response = response + body
+    🔙 response
+✨
+
+🎀 🔢 http_send(🔢 cliente, 🔡 response) 🟢
+    🔙 kl_tcp_send(cliente, response)
+✨
+
+🎀 🔢 http_send_text(🔢 cliente, 🔢 status, 🔡 content_type, 🔡 body) 🟢
+    🔡 response = http_response(status, content_type, body)
+    🔙 http_send(cliente, response)
+✨
