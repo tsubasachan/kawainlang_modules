@@ -1,0 +1,11 @@
+name = "std/result"
+version = "0.1.0"
+description = "Tipos Resultado e Option para fluxos sem excecao no caminho normal"
+entry = "result.🎀"
+license = "MIT"
+
+[files]
+kawai = ["result.🎀"]
+
+[compat]
+kawailang = ">=0.1.96"

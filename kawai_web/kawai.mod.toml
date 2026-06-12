@@ -1,6 +1,6 @@
 name = "kawai/web"
-version = "0.2.0"
-description = "KawaiWeb, framework web minimalista com templates HTML para KawaiLang"
+version = "0.3.0"
+description = "KawaiWeb, framework web minimalista com templates HTML e middleware para KawaiLang"
 entry = "web.🎀"
 license = "MIT"
 
@@ -8,4 +8,4 @@ license = "MIT"
 kawai = ["web.🎀"]
 
 [compat]
-kawailang = ">=0.1.93"
+kawailang = ">=0.1.94"

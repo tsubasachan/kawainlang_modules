@@ -28,6 +28,7 @@
     ❓ status 🤝 201 🟢 🔙 "Created" ✨
     ❓ status 🤝 204 🟢 🔙 "No Content" ✨
     ❓ status 🤝 400 🟢 🔙 "Bad Request" ✨
+    ❓ status 🤝 401 🟢 🔙 "Unauthorized" ✨
     ❓ status 🤝 404 🟢 🔙 "Not Found" ✨
     ❓ status 🤝 500 🟢 🔙 "Internal Server Error" ✨
     🔙 "OK"

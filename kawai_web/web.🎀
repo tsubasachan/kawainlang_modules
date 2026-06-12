@@ -48,6 +48,51 @@
     🔙 http_header(req, nome)
 ✨
 
+🎀 🔢 web_log_request(📕(🔡, 🔡) req) 🟢
+    📕(🔡, 🔡) ctx = {"method": req["method"], "path": req["path"]}
+    log_evento("info", "request", ctx)
+    🔙 0
+✨
+
+🎀 ✅ web_auth_header(📕(🔡, 🔡) req, 🔡 nome, 🔡 esperado) 🟢
+    🔙 web_header(req, nome) 🤝 esperado
+✨
+
+🎀 🔡 web_unauthorized() 🟢
+    🔙 http_response(401, "text/plain", "Nao autorizado")
+✨
+
+🎀 🔢 web_send_unauthorized(🔢 cliente) 🟢
+    🔙 http_send_text(cliente, 401, "text/plain", "Nao autorizado")
+✨
+
+🎀 🔡 web_add_header(🔡 response, 🔡 nome, 🔡 valor) 🟢
+    🔡 marcador = "\r\n\r\n"
+    🔢 pos = -1
+    🔢 i = 0
+
+    ➿ i + 4 👈 response 📏 🟢
+        ❓ (pos 🤝 -1) 🔗 ((response ✂️ i 👉 (i + 4)) 🤝 marcador) 🟢
+            pos = i
+        ✨
+        i = i + 1
+    ✨
+
+    ❓ pos 👈 -1 🟢
+        🔙 response
+    ✨
+
+    🔡 antes = response ✂️ 0 👉 pos
+    🔡 depois = response ✂️ pos 👉
+    🔙 antes + "\r\n" + nome + ": " + valor + depois
+✨
+
+🎀 🔡 web_cors(🔡 response, 🔡 origem) 🟢
+    🔡 com_origem = web_add_header(response, "Access-Control-Allow-Origin", origem)
+    🔡 com_metodos = web_add_header(com_origem, "Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS")
+    🔙 web_add_header(com_metodos, "Access-Control-Allow-Headers", "Content-Type, Authorization")
+✨
+
 🎀 🔡 web_text(🔡 body) 🟢
     🔙 http_response(200, "text/plain", body)
 ✨

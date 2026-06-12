@@ -1,0 +1,145 @@
+// Resultado e Option para fluxos sem excecao no caminho normal.
+
+🏛 Resultado 🟢
+    ✅ sucesso = 👎
+    🔡 valor = ""
+    🔡 erro = ""
+
+    🏗(✅ sucesso_inicial, 🔡 valor_inicial, 🔡 erro_inicial) 🟢
+        🪞 🔎 sucesso = sucesso_inicial
+        🪞 🔎 valor = valor_inicial
+        🪞 🔎 erro = erro_inicial
+    ✨
+✨
+
+🏛 Option 🟢
+    ✅ existe = 👎
+    🔡 valor = ""
+
+    🏗(✅ existe_inicial, 🔡 valor_inicial) 🟢
+        🪞 🔎 existe = existe_inicial
+        🪞 🔎 valor = valor_inicial
+    ✨
+✨
+
+🎀 Resultado resultado_ok(🔡 valor) 🟢
+    🔙 📜 Resultado(👍, valor, "")
+✨
+
+🎀 Resultado resultado_ok_int(🔢 valor) 🟢
+    🔙 resultado_ok("" + valor)
+✨
+
+🎀 Resultado resultado_ok_decimal(🧪 valor) 🟢
+    🔙 resultado_ok("" + valor)
+✨
+
+🎀 Resultado resultado_ok_bool(✅ valor) 🟢
+    🔙 resultado_ok("" + valor)
+✨
+
+🎀 Resultado resultado_erro(🔡 erro) 🟢
+    🔙 📜 Resultado(👎, "", erro)
+✨
+
+🎀 ✅ resultado_e_ok(Resultado res) 🟢
+    🔙 res 🔎 sucesso
+✨
+
+🎀 ✅ resultado_e_erro(Resultado res) 🟢
+    ✅ erro = 🚫 (res 🔎 sucesso)
+    🔙 erro
+✨
+
+🎀 🔡 resultado_valor(Resultado res) 🟢
+    🔙 res 🔎 valor
+✨
+
+🎀 🔡 resultado_erro_msg(Resultado res) 🟢
+    🔙 res 🔎 erro
+✨
+
+🎀 🔡 resultado_valor_ou(Resultado res, 🔡 padrao) 🟢
+    ❓ res 🔎 sucesso 🟢
+        🔙 res 🔎 valor
+    ✨
+    🔙 padrao
+✨
+
+🎀 🔢 resultado_valor_int(Resultado res) 🟢
+    🔙 (res 🔎 valor) ➡️ 🔢
+✨
+
+🎀 🧪 resultado_valor_decimal(Resultado res) 🟢
+    🔙 (res 🔎 valor) ➡️ 🧪
+✨
+
+🎀 ✅ resultado_valor_bool(Resultado res) 🟢
+    🔙 (res 🔎 valor) 🤝 "👍"
+✨
+
+🎀 🔡 resultado_unwrap(Resultado res) 🟢
+    ❓ res 🔎 sucesso 🟢
+        🔙 res 🔎 valor
+    ✨
+    💥 res 🔎 erro
+✨
+
+🎀 Option option_algum(🔡 valor) 🟢
+    🔙 📜 Option(👍, valor)
+✨
+
+🎀 Option option_algum_int(🔢 valor) 🟢
+    🔙 option_algum("" + valor)
+✨
+
+🎀 Option option_algum_decimal(🧪 valor) 🟢
+    🔙 option_algum("" + valor)
+✨
+
+🎀 Option option_algum_bool(✅ valor) 🟢
+    🔙 option_algum("" + valor)
+✨
+
+🎀 Option option_nenhum() 🟢
+    🔙 📜 Option(👎, "")
+✨
+
+🎀 ✅ option_e_algum(Option opt) 🟢
+    🔙 opt 🔎 existe
+✨
+
+🎀 ✅ option_e_nenhum(Option opt) 🟢
+    ✅ nenhum = 🚫 (opt 🔎 existe)
+    🔙 nenhum
+✨
+
+🎀 🔡 option_valor(Option opt) 🟢
+    🔙 opt 🔎 valor
+✨
+
+🎀 🔡 option_valor_ou(Option opt, 🔡 padrao) 🟢
+    ❓ opt 🔎 existe 🟢
+        🔙 opt 🔎 valor
+    ✨
+    🔙 padrao
+✨
+
+🎀 🔢 option_valor_int(Option opt) 🟢
+    🔙 (opt 🔎 valor) ➡️ 🔢
+✨
+
+🎀 🧪 option_valor_decimal(Option opt) 🟢
+    🔙 (opt 🔎 valor) ➡️ 🧪
+✨
+
+🎀 ✅ option_valor_bool(Option opt) 🟢
+    🔙 (opt 🔎 valor) 🤝 "👍"
+✨
+
+🎀 🔡 option_unwrap(Option opt, 🔡 erro) 🟢
+    ❓ opt 🔎 existe 🟢
+        🔙 opt 🔎 valor
+    ✨
+    💥 erro
+✨

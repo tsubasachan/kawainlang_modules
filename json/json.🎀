@@ -43,7 +43,19 @@
         ❓ char 🤝 "\\" 🟢
             i = i + 1
             🔡 escaped = texto[i]
-            resultado = resultado + escaped
+            ❓ escaped 🤝 "n" 🟢
+                resultado = resultado + "\n"
+            ✨ ❗ escaped 🤝 "r" 🟢
+                resultado = resultado + "\r"
+            ✨ ❗ escaped 🤝 "t" 🟢
+                resultado = resultado + "\t"
+            ✨ ❗ escaped 🤝 "\"" 🟢
+                resultado = resultado + "\""
+            ✨ ❗ escaped 🤝 "\\" 🟢
+                resultado = resultado + "\\"
+            ✨ ❔ 🟢
+                resultado = resultado + escaped
+            ✨
         ✨ ❔ 🟢
             resultado = resultado + char
         ✨
@@ -52,12 +64,37 @@
     🔙 (resultado, i)
 ✨
 
+🎀 🔡 json_escape_string(🔡 texto) 🟢
+    🔡 resultado = ""
+    🔢 i = 0
+
+    ➿ i < texto 📏 🟢
+        🔡 char = texto[i]
+        ❓ char 🤝 "\\" 🟢
+            resultado = resultado + "\\\\"
+        ✨ ❗ char 🤝 "\"" 🟢
+            resultado = resultado + "\\\""
+        ✨ ❗ char 🤝 "\n" 🟢
+            resultado = resultado + "\\n"
+        ✨ ❗ char 🤝 "\r" 🟢
+            resultado = resultado + "\\r"
+        ✨ ❗ char 🤝 "\t" 🟢
+            resultado = resultado + "\\t"
+        ✨ ❔ 🟢
+            resultado = resultado + char
+        ✨
+        i = i + 1
+    ✨
+
+    🔙 resultado
+✨
+
 // Função para decodificar números como string bruta
 🎀 📥(🔡, 🔢) ler_numero_str(🔡 texto, 🔢 i) 🟢
     🔡 num_str = ""
     ➿ i < texto 📏 🟢
         🔡 char = texto[i]
-        ❓ (char 🤝 "-") ↔ (char 🤝 ".") ↔ (char 🤝 "0") ↔ (char 🤝 "1") ↔ (char 🤝 "2") ↔ (char 🤝 "3") ↔ (char 🤝 "4") ↔ (char 🤝 "5") ↔ (char 🤝 "6") ↔ (char 🤝 "7") ↔ (char 🤝 "8") ↔ (char 🤝 "9") 🟢
+        ❓ (char 🤝 "-") ↔ (char 🤝 "+") ↔ (char 🤝 ".") ↔ (char 🤝 "e") ↔ (char 🤝 "E") ↔ (char 🤝 "0") ↔ (char 🤝 "1") ↔ (char 🤝 "2") ↔ (char 🤝 "3") ↔ (char 🤝 "4") ↔ (char 🤝 "5") ↔ (char 🤝 "6") ↔ (char 🤝 "7") ↔ (char 🤝 "8") ↔ (char 🤝 "9") 🟢
             num_str = num_str + char
             i = i + 1
         ✨ ❔ 🟢
@@ -65,6 +102,40 @@
         ✨
     ✨
     🔙 (num_str, i)
+✨
+
+🎀 📥(🔡, 🔢) ler_estrutura_json(🔡 texto, 🔢 i, 🔡 abre, 🔡 fecha) 🟢
+    🔢 inicio = i
+    i = i + 1
+    🔢 nivel = 1
+    ✅ em_string = 👎
+    ✅ escape = 👎
+
+    ➿ (i < texto 📏) 🔗 (nivel > 0) 🟢
+        🔡 char = texto[i]
+
+        ❓ em_string 🟢
+            ❓ escape 🟢
+                escape = 👎
+            ✨ ❗ char 🤝 "\\" 🟢
+                escape = 👍
+            ✨ ❗ char 🤝 "\"" 🟢
+                em_string = 👎
+            ✨
+        ✨ ❔ 🟢
+            ❓ char 🤝 "\"" 🟢
+                em_string = 👍
+            ✨ ❗ char 🤝 abre 🟢
+                nivel = nivel + 1
+            ✨ ❗ char 🤝 fecha 🟢
+                nivel = nivel - 1
+            ✨
+        ✨
+
+        i = i + 1
+    ✨
+
+    🔙 (texto ✂️ inicio 👉 i, i)
 ✨
 
 // Função auxiliar recursiva que lê um valor JSON e o retorna convertido em String.
@@ -81,52 +152,12 @@
         🔙 ler_string(texto, i)
     ✨
 
-    // Se for Dicionário/Objeto
     ❓ char 🤝 "{" 🟢
-        🔢 inicio = i
-        i = i + 1
-        🔢 braces = 1
-        ➿ (i < texto 📏) 🔗 (braces > 0) 🟢
-            🔡 c = texto[i]
-            ❓ c 🤝 "{" 🟢
-                braces = braces + 1
-            ✨
-            ❓ c 🤝 "}" 🟢
-                braces = braces - 1
-            ✨
-            i = i + 1
-        ✨
-        🔡 sub = ""
-        🔢 idx = inicio
-        ➿ idx < i 🟢
-            sub = sub + texto[idx]
-            idx = idx + 1
-        ✨
-        🔙 (sub, i)
+        🔙 ler_estrutura_json(texto, i, "{", "}")
     ✨
 
-    // Se for Lista/Array
     ❓ char 🤝 "[" 🟢
-        🔢 inicio = i
-        i = i + 1
-        🔢 brackets = 1
-        ➿ (i < texto 📏) 🔗 (brackets > 0) 🟢
-            🔡 c = texto[i]
-            ❓ c 🤝 "[" 🟢
-                brackets = brackets + 1
-            ✨
-            ❓ c 🤝 "]" 🟢
-                brackets = brackets - 1
-            ✨
-            i = i + 1
-        ✨
-        🔡 sub = ""
-        🔢 idx = inicio
-        ➿ idx < i 🟢
-            sub = sub + texto[idx]
-            idx = idx + 1
-        ✨
-        🔙 (sub, i)
+        🔙 ler_estrutura_json(texto, i, "[", "]")
     ✨
 
     // Se for Booleanos ou Nulos (true, false, null)
@@ -202,6 +233,182 @@
     🔙 resultado
 ✨
 
+🎀 🔡 json_tipo(🔡 valor) 🟢
+    🔢 i = pular_espacos(valor, 0)
+
+    ❓ (i 🤝 valor 📏) ↔ (i > valor 📏) 🟢
+        🔙 "vazio"
+    ✨
+
+    🔡 char = valor[i]
+    ❓ char 🤝 "{" 🟢 🔙 "objeto" ✨
+    ❓ char 🤝 "[" 🟢 🔙 "lista" ✨
+    ❓ char 🤝 "\"" 🟢 🔙 "string" ✨
+    ❓ valor 🤝 "true" 🟢 🔙 "bool" ✨
+    ❓ valor 🤝 "false" 🟢 🔙 "bool" ✨
+    ❓ valor 🤝 "null" 🟢 🔙 "nulo" ✨
+    🔙 "numero"
+✨
+
+🎀 ✅ json_e_objeto(🔡 valor) 🟢
+    🔙 json_tipo(valor) 🤝 "objeto"
+✨
+
+🎀 ✅ json_e_lista(🔡 valor) 🟢
+    🔙 json_tipo(valor) 🤝 "lista"
+✨
+
+🎀 ✅ json_e_string(🔡 valor) 🟢
+    🔙 json_tipo(valor) 🤝 "string"
+✨
+
+🎀 ✅ json_e_numero(🔡 valor) 🟢
+    🔙 json_tipo(valor) 🤝 "numero"
+✨
+
+🎀 ✅ json_e_bool(🔡 valor) 🟢
+    🔙 json_tipo(valor) 🤝 "bool"
+✨
+
+🎀 ✅ json_e_nulo(🔡 valor) 🟢
+    🔙 json_tipo(valor) 🤝 "nulo"
+✨
+
+🎀 🔡 json_texto(🔡 valor) 🟢
+    🔢 i = pular_espacos(valor, 0)
+
+    ❓ (i < valor 📏) 🔗 (valor[i] 🤝 "\"") 🟢
+        📥(🔡, 🔢) res = ler_string(valor, i)
+        🔡 texto = res[0]
+        🔙 texto
+    ✨
+
+    🔙 valor
+✨
+
+🎀 🔢 json_inteiro(🔡 valor) 🟢
+    🔙 valor ➡️ 🔢
+✨
+
+🎀 🧪 json_decimal(🔡 valor) 🟢
+    🔙 valor ➡️ 🧪
+✨
+
+🎀 ✅ json_bool(🔡 valor) 🟢
+    🔙 valor 🤝 "true"
+✨
+
+🎀 🔡 json_objeto_get(🔡 objeto, 🔡 chave_busca) 🟢
+    🔢 i = pular_espacos(objeto, 0)
+    ❓ (i 🤝 objeto 📏) ↔ (i > objeto 📏) 🟢 🔙 "" ✨
+    ❓ objeto[i] 💔 "{" 🟢 🔙 "" ✨
+
+    i = i + 1
+
+    ➿ i < objeto 📏 🟢
+        i = pular_espacos(objeto, i)
+        ❓ (i < objeto 📏) 🔗 (objeto[i] 🤝 "}") 🟢
+            🔙 ""
+        ✨
+
+        ❓ (i < objeto 📏) 🔗 (objeto[i] 🤝 "\"") 🟢
+            📥(🔡, 🔢) chave_res = ler_string(objeto, i)
+            🔡 chave = chave_res[0]
+            i = chave_res[1]
+
+            i = pular_espacos(objeto, i)
+            ❓ (i < objeto 📏) 🔗 (objeto[i] 🤝 ":") 🟢
+                i = i + 1
+            ✨
+
+            i = pular_espacos(objeto, i)
+            📥(🔡, 🔢) valor_res = parse_valor_bruto(objeto, i)
+            🔡 valor = valor_res[0]
+            i = valor_res[1]
+
+            ❓ chave 🤝 chave_busca 🟢
+                🔙 valor
+            ✨
+
+            i = pular_espacos(objeto, i)
+            ❓ (i < objeto 📏) 🔗 (objeto[i] 🤝 ",") 🟢
+                i = i + 1
+            ✨
+        ✨ ❔ 🟢
+            i = i + 1
+        ✨
+    ✨
+
+    🔙 ""
+✨
+
+🎀 🔢 json_lista_tamanho(🔡 lista) 🟢
+    🔢 i = pular_espacos(lista, 0)
+    ❓ (i 🤝 lista 📏) ↔ (i > lista 📏) 🟢 🔙 0 ✨
+    ❓ lista[i] 💔 "[" 🟢 🔙 0 ✨
+
+    i = i + 1
+    🔢 total = 0
+
+    ➿ i < lista 📏 🟢
+        i = pular_espacos(lista, i)
+        ❓ (i < lista 📏) 🔗 (lista[i] 🤝 "]") 🟢
+            🔙 total
+        ✨
+
+        📥(🔡, 🔢) valor_res = parse_valor_bruto(lista, i)
+        i = valor_res[1]
+        total = total + 1
+
+        i = pular_espacos(lista, i)
+        ❓ (i < lista 📏) 🔗 (lista[i] 🤝 ",") 🟢
+            i = i + 1
+        ✨ ❗ (i < lista 📏) 🔗 (lista[i] 🤝 "]") 🟢
+            🔙 total
+        ✨ ❔ 🟢
+            i = i + 1
+        ✨
+    ✨
+
+    🔙 total
+✨
+
+🎀 🔡 json_lista_item(🔡 lista, 🔢 indice) 🟢
+    🔢 i = pular_espacos(lista, 0)
+    ❓ (i 🤝 lista 📏) ↔ (i > lista 📏) 🟢 🔙 "" ✨
+    ❓ lista[i] 💔 "[" 🟢 🔙 "" ✨
+
+    i = i + 1
+    🔢 atual = 0
+
+    ➿ i < lista 📏 🟢
+        i = pular_espacos(lista, i)
+        ❓ (i < lista 📏) 🔗 (lista[i] 🤝 "]") 🟢
+            🔙 ""
+        ✨
+
+        📥(🔡, 🔢) valor_res = parse_valor_bruto(lista, i)
+        🔡 valor = valor_res[0]
+        i = valor_res[1]
+
+        ❓ atual 🤝 indice 🟢
+            🔙 valor
+        ✨
+
+        atual = atual + 1
+        i = pular_espacos(lista, i)
+        ❓ (i < lista 📏) 🔗 (lista[i] 🤝 ",") 🟢
+            i = i + 1
+        ✨ ❗ (i < lista 📏) 🔗 (lista[i] 🤝 "]") 🟢
+            🔙 ""
+        ✨ ❔ 🟢
+            i = i + 1
+        ✨
+    ✨
+
+    🔙 ""
+✨
+
 // Função para codificar um dicionário para uma string JSON
 🎀 🔡 codificar(📕(🔡, 🔡) dados) 🟢
     🔡 resultado = "{"
@@ -214,10 +421,9 @@
             primeira = 👎
         ✨
         🔡 valor = dados[chave]
-        resultado = resultado + "\"" + chave + "\": \"" + valor + "\""
+        resultado = resultado + "\"" + json_escape_string(chave) + "\": \"" + json_escape_string(valor) + "\""
     ✨
     
     resultado = resultado + "}"
     🔙 resultado
 ✨
-

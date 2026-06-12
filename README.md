@@ -17,7 +17,8 @@ Cada modulo tambem possui um manifesto proprio `kawai.mod.toml`, com:
 
 - `std/config` (`config/`): configuracao e leitura simples de `.env`.
 - `std/http` (`http/`): cliente HTTP GET via FFI, parsers HTTP/URL, servidor HTTP simples e helpers de rota.
-- `std/json` (`json/`): manipulacao JSON.
-- `kawai/web` (`kawai_web/`): KawaiWeb, framework web minimalista.
+- `std/json` (`json/`): manipulacao JSON com objetos aninhados, listas e conversores.
+- `kawai/web` (`kawai_web/`): KawaiWeb, framework web minimalista com templates e middleware.
 - `std/log` (`log/`): logging estruturado textual.
 - `std/rede` (`rede/`): sockets TCP POSIX via FFI.
+- `std/result` (`result/`): tipos `Resultado` e `Option` para fluxos sem excecao no caminho normal.
