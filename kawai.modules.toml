@@ -1,12 +1,13 @@
 name = "kawainlang_modules"
-version = "0.11.0"
+version = "0.13.0"
 description = "Biblioteca padrao e modulos oficiais da KawaiLang"
 license = "MIT"
 
 [compat]
-kawailang = ">=0.1.96"
+kawailang = ">=0.1.98"
 
 [modules]
+cli = "cli/kawai.mod.toml"
 config = "config/kawai.mod.toml"
 http = "http/kawai.mod.toml"
 json = "json/kawai.mod.toml"
@@ -14,3 +15,4 @@ kawai_web = "kawai_web/kawai.mod.toml"
 log = "log/kawai.mod.toml"
 rede = "rede/kawai.mod.toml"
 result = "result/kawai.mod.toml"
+sqlite = "sqlite/kawai.mod.toml"

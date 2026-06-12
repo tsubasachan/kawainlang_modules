@@ -1,0 +1,15 @@
+name = "std/cli"
+version = "0.1.0"
+description = "Builder simples de CLI com flags, argumentos, help e parse de argv"
+entry = "cli.🎀"
+license = "MIT"
+
+[ffi]
+python = "cli.py"
+c = "cli.c"
+
+[files]
+kawai = ["cli.🎀"]
+
+[compat]
+kawailang = ">=0.1.97"

@@ -1,0 +1,15 @@
+name = "std/sqlite"
+version = "0.1.0"
+description = "SQLite via FFI com execucao SQL, leitura de valor e linha JSON/dicionario"
+entry = "sqlite.🎀"
+license = "MIT"
+
+[ffi]
+python = "sqlite.py"
+c = "sqlite.c"
+
+[files]
+kawai = ["sqlite.🎀"]
+
+[compat]
+kawailang = ">=0.1.98"

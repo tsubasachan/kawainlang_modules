@@ -1,0 +1,243 @@
+📚 "std/result.🎀"
+
+🔌 🔢 kl_cli_argc()
+🔌 🔡 kl_cli_arg(🔢 index)
+
+🔡 __cli_nome = "app"
+🔡 __cli_descricao = ""
+🔡 __cli_flags = ""
+🔡 __cli_args = ""
+
+🎀 🔢 cli_nome(🔡 nome) 🟢
+    🌍 __cli_nome
+    __cli_nome = nome
+    🔙 0
+✨
+
+🎀 🔢 cli_descricao(🔡 descricao) 🟢
+    🌍 __cli_descricao
+    __cli_descricao = descricao
+    🔙 0
+✨
+
+🎀 🔡 cli_append_linha(🔡 atual, 🔡 linha) 🟢
+    ❓ atual 📏 🤝 0 🟢
+        🔙 linha
+    ✨
+    🔙 atual + "\n" + linha
+✨
+
+🎀 🔢 cli_flag(🔡 nome, 🔡 curto, 🔡 descricao) 🟢
+    🌍 __cli_flags
+    __cli_flags = cli_append_linha(__cli_flags, nome + "|" + curto + "|0|" + descricao)
+    🔙 0
+✨
+
+🎀 🔢 cli_opcao(🔡 nome, 🔡 curto, 🔡 descricao) 🟢
+    🌍 __cli_flags
+    __cli_flags = cli_append_linha(__cli_flags, nome + "|" + curto + "|1|" + descricao)
+    🔙 0
+✨
+
+🎀 🔢 cli_arg(🔡 nome, 🔡 descricao) 🟢
+    🌍 __cli_args
+    __cli_args = cli_append_linha(__cli_args, nome + "|" + descricao)
+    🔙 0
+✨
+
+🎀 ✅ cli_comeca_com(🔡 texto, 🔡 prefixo) 🟢
+    ❓ texto 📏 < prefixo 📏 🟢
+        🔙 👎
+    ✨
+    🔙 (texto ✂️ 0 👉 (prefixo 📏)) 🤝 prefixo
+✨
+
+🎀 🔢 cli_indice_igual(🔡 texto) 🟢
+    🔢 i = 0
+    ➿ i < texto 📏 🟢
+        ❓ texto[i] 🤝 "=" 🟢
+            🔙 i
+        ✨
+        i = i + 1
+    ✨
+    🔙 -1
+✨
+
+🎀 🔡 cli_flag_curto_para_nome(🔡 curto) 🟢
+    🌍 __cli_flags
+    📦🔡 linhas = __cli_flags 🪓 "\n"
+    🔢 i = 0
+    ➿ i < linhas 📏 🟢
+        📦🔡 partes = linhas[i] 🪓 "|"
+        ❓ (partes 📏 > 1) 🔗 (partes[1] 🤝 curto) 🟢
+            🔡 nome = partes[0]
+            🔙 nome
+        ✨
+        i = i + 1
+    ✨
+    🔙 curto
+✨
+
+🎀 ✅ cli_flag_tem_valor(🔡 nome) 🟢
+    🌍 __cli_flags
+    📦🔡 linhas = __cli_flags 🪓 "\n"
+    🔢 i = 0
+    ➿ i < linhas 📏 🟢
+        📦🔡 partes = linhas[i] 🪓 "|"
+        ❓ (partes 📏 > 2) 🔗 (partes[0] 🤝 nome) 🟢
+            🔡 tem_valor = partes[2]
+            🔙 tem_valor 🤝 "1"
+        ✨
+        i = i + 1
+    ✨
+    🔙 👎
+✨
+
+🎀 🔡 cli_arg_nome(🔢 indice) 🟢
+    🌍 __cli_args
+    📦🔡 linhas = __cli_args 🪓 "\n"
+    ❓ (indice < linhas 📏) 🔗 (linhas[indice] 📏 > 0) 🟢
+        📦🔡 partes = linhas[indice] 🪓 "|"
+        🔡 nome = partes[0]
+        🔙 nome
+    ✨
+    🔙 "__pos" + indice
+✨
+
+🎀 📕(🔡, 🔡) cli_parse() 🟢
+    📕(🔡, 🔡) resultado = {"__ok": "👍", "__help": "👎", "__erro": ""}
+    🔢 total = kl_cli_argc()
+    🔢 i = 0
+    🔢 pos = 0
+
+    ➿ i < total 🟢
+        🔡 atual = kl_cli_arg(i)
+
+        ❓ (atual 🤝 "--help") ↔ (atual 🤝 "-h") 🟢
+            resultado["__help"] = "👍"
+            i = i + 1
+        ✨ ❗ cli_comeca_com(atual, "--") 🟢
+            🔡 flag = atual ✂️ 2 👉
+            🔡 valor = "👍"
+            🔢 igual = cli_indice_igual(flag)
+
+            ❓ igual 👉 0 🟢
+                valor = flag ✂️ (igual + 1) 👉
+                🔡 flag_nome = flag ✂️ 0 👉 igual
+                flag = flag_nome
+            ✨ ❗ cli_flag_tem_valor(flag) 🟢
+                ❓ i + 1 < total 🟢
+                    valor = kl_cli_arg(i + 1)
+                    i = i + 1
+                ✨ ❔ 🟢
+                    resultado["__ok"] = "👎"
+                    resultado["__erro"] = "Opcao --" + flag + " esperava valor"
+                ✨
+            ✨
+
+            resultado[flag] = valor
+            i = i + 1
+        ✨ ❗ cli_comeca_com(atual, "-") 🟢
+            🔡 curto = atual ✂️ 1 👉
+            🔡 flag = cli_flag_curto_para_nome(curto)
+            🔡 valor = "👍"
+
+            ❓ cli_flag_tem_valor(flag) 🟢
+                ❓ i + 1 < total 🟢
+                    valor = kl_cli_arg(i + 1)
+                    i = i + 1
+                ✨ ❔ 🟢
+                    resultado["__ok"] = "👎"
+                    resultado["__erro"] = "Opcao -" + curto + " esperava valor"
+                ✨
+            ✨
+
+            resultado[flag] = valor
+            i = i + 1
+        ✨ ❔ 🟢
+            🔡 nome_arg = cli_arg_nome(pos)
+            resultado[nome_arg] = atual
+            pos = pos + 1
+            i = i + 1
+        ✨
+    ✨
+
+    🔙 resultado
+✨
+
+🎀 Resultado cli_validar(📕(🔡, 🔡) args) 🟢
+    ❓ args["__ok"] 🤝 "👍" 🟢
+        🔙 resultado_ok("ok")
+    ✨
+    🔡 erro = args["__erro"]
+    🔙 resultado_erro(erro)
+✨
+
+🎀 ✅ cli_tem_flag(📕(🔡, 🔡) args, 🔡 nome) 🟢
+    🔡 valor = args[nome]
+    🔙 valor 🤝 "👍"
+✨
+
+🎀 🔡 cli_valor(📕(🔡, 🔡) args, 🔡 nome, 🔡 padrao) 🟢
+    🔡 valor = args[nome]
+    ❓ valor 📏 🤝 0 🟢
+        🔙 padrao
+    ✨
+    🔙 valor
+✨
+
+🎀 🔢 cli_valor_int(📕(🔡, 🔡) args, 🔡 nome, 🔢 padrao) 🟢
+    🔡 valor = args[nome]
+    ❓ valor 📏 🤝 0 🟢
+        🔙 padrao
+    ✨
+    🔙 valor ➡️ 🔢
+✨
+
+🎀 ✅ cli_pediu_help(📕(🔡, 🔡) args) 🟢
+    🔡 valor = args["__help"]
+    🔙 valor 🤝 "👍"
+✨
+
+🎀 🔡 cli_help() 🟢
+    🌍 __cli_nome
+    🌍 __cli_descricao
+    🌍 __cli_flags
+    🌍 __cli_args
+    🔡 texto = "Uso: " + __cli_nome
+    ❓ __cli_args 📏 > 0 🟢
+        📦🔡 args = __cli_args 🪓 "\n"
+        🔢 a = 0
+        ➿ a < args 📏 🟢
+            📦🔡 partes_arg = args[a] 🪓 "|"
+            texto = texto + " <" + partes_arg[0] + ">"
+            a = a + 1
+        ✨
+    ✨
+
+    ❓ __cli_descricao 📏 > 0 🟢
+        texto = texto + "\n\n" + __cli_descricao
+    ✨
+
+    ❓ __cli_flags 📏 > 0 🟢
+        texto = texto + "\n\nOpcoes:"
+        📦🔡 flags = __cli_flags 🪓 "\n"
+        🔢 i = 0
+        ➿ i < flags 📏 🟢
+            📦🔡 partes = flags[i] 🪓 "|"
+            🔡 linha = "  --" + partes[0]
+            ❓ partes[1] 📏 > 0 🟢
+                linha = linha + ", -" + partes[1]
+            ✨
+            ❓ partes[2] 🤝 "1" 🟢
+                linha = linha + " <valor>"
+            ✨
+            linha = linha + "  " + partes[3]
+            texto = texto + "\n" + linha
+            i = i + 1
+        ✨
+        texto = texto + "\n  --help, -h  Mostra esta ajuda"
+    ✨
+
+    🔙 texto
+✨

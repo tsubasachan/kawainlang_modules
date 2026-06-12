@@ -1,0 +1,54 @@
+📚 "std/json.🎀"
+📚 "std/result.🎀"
+
+🔌 🔢 kl_sqlite_open(🔡 path)
+🔌 🔢 kl_sqlite_close(🔢 db)
+🔌 🔢 kl_sqlite_exec(🔢 db, 🔡 sql)
+🔌 🔡 kl_sqlite_value(🔢 db, 🔡 sql)
+🔌 🔡 kl_sqlite_row_json(🔢 db, 🔡 sql)
+🔌 🔡 kl_sqlite_error()
+
+🎀 🔢 sqlite_abrir(🔡 caminho) 🟢
+    🔙 kl_sqlite_open(caminho)
+✨
+
+🎀 🔢 sqlite_fechar(🔢 db) 🟢
+    🔙 kl_sqlite_close(db)
+✨
+
+🎀 🔢 sqlite_exec(🔢 db, 🔡 sql) 🟢
+    🔙 kl_sqlite_exec(db, sql)
+✨
+
+🎀 Resultado sqlite_exec_result(🔢 db, 🔡 sql) 🟢
+    🔢 status = sqlite_exec(db, sql)
+    ❓ status 🤝 0 🟢
+        🔙 resultado_ok("ok")
+    ✨
+    🔙 resultado_erro(sqlite_erro())
+✨
+
+🎀 🔡 sqlite_valor(🔢 db, 🔡 sql) 🟢
+    🔙 kl_sqlite_value(db, sql)
+✨
+
+🎀 🔡 sqlite_linha_json(🔢 db, 🔡 sql) 🟢
+    🔙 kl_sqlite_row_json(db, sql)
+✨
+
+🎀 📕(🔡, 🔡) sqlite_linha(🔢 db, 🔡 sql) 🟢
+    🔡 json = sqlite_linha_json(db, sql)
+    🔙 decodificar(json)
+✨
+
+🎀 🔡 sqlite_erro() 🟢
+    🔙 kl_sqlite_error()
+✨
+
+🎀 🔡 sqlite_escape(🔡 valor) 🟢
+    🔙 valor 🔄 "'" ➡ "''"
+✨
+
+🎀 🔡 sqlite_texto(🔡 valor) 🟢
+    🔙 "'" + sqlite_escape(valor) + "'"
+✨
