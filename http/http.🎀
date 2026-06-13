@@ -1,5 +1,6 @@
 // Módulo FFI para requisições HTTP na KawaiLang
 📚 "server.🎀"
+📚 "std/rede.🎀"
 
 🔌 🔡 kl_http_get(🔡 url)
 
@@ -260,4 +261,60 @@
     ✨
 
     🔙 resultado
+✨
+
+🎀 🔡 http_requisicao(🔡 host, 🔢 porta, 🔡 metodo, 🔡 path, 🔡 corpo) 🟢
+    ClienteTCP cliente = 📜 ClienteTCP()
+    🔢 status = cliente 🔎 conectar(host, porta)
+    ❓ status < 0 🟢
+        🔙 ""
+    ✨
+
+    🔡 request_str = metodo + " " + path + " HTTP/1.1\r\n"
+    request_str = request_str + "Host: " + host + "\r\n"
+    request_str = request_str + "Connection: close\r\n"
+    ❓ corpo 📏 > 0 🟢
+        🔡 len_str = corpo 📏 ➡️ 🔡
+        request_str = request_str + "Content-Length: " + len_str + "\r\n"
+    ✨
+    request_str = request_str + "\r\n"
+    request_str = request_str + corpo
+
+    cliente 🔎 enviar(request_str)
+
+    🔡 resposta = ""
+    ➿ 👍 🟢
+        🔡 chunk = cliente 🔎 receber(4096)
+        ❓ chunk 📏 🤝 0 🟢
+            🛑
+        ✨
+        resposta = resposta + chunk
+    ✨
+    cliente 🔎 fechar()
+    🔙 resposta
+✨
+
+🎀 🔡 http_corpo_resposta(🔡 resposta_bruta) 🟢
+    📦🔡 partes = resposta_bruta 🪓 "\r\n\r\n"
+    ❓ partes 📏 👉 1 🟢
+        🔡 corpo = partes[1]
+        🔢 i = 2
+        ➿ i < partes 📏 🟢
+            corpo = corpo + "\r\n\r\n" + partes[i]
+            i = i + 1
+        ✨
+        🔙 corpo
+    ✨
+    🔙 ""
+✨
+
+🎀 🔢 http_status_resposta(🔡 resposta_bruta) 🟢
+    📦🔡 linhas = resposta_bruta 🪓 "\r\n"
+    ❓ linhas 📏 > 0 🟢
+        📦🔡 partes = linhas[0] 🪓 " "
+        ❓ partes 📏 > 1 🟢
+            🔙 (partes[1] ➡️ 🔢)
+        ✨
+    ✨
+    🔙 0
 ✨

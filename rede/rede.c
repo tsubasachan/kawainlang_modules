@@ -1,6 +1,7 @@
 #include <arpa/inet.h>
 #include <errno.h>
 #include <netdb.h>
+#include <sys/select.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/socket.h>
@@ -91,4 +92,19 @@ char* kl_tcp_recv(int socket_fd, int max_bytes) {
 
 int kl_tcp_close(int socket_fd) {
     return close(socket_fd) == 0 ? 0 : -1;
+}
+
+int kl_tcp_selecionar(int socket_fd, int timeout_ms) {
+    fd_set read_fds;
+    FD_ZERO(&read_fds);
+    FD_SET(socket_fd, &read_fds);
+
+    struct timeval tv;
+    tv.tv_sec = timeout_ms / 1000;
+    tv.tv_usec = (timeout_ms % 1000) * 1000;
+
+    int activity = select(socket_fd + 1, &read_fds, NULL, NULL, &tv);
+    if (activity < 0) return -1;
+    if (activity == 0) return 0;
+    return FD_ISSET(socket_fd, &read_fds) ? 1 : 0;
 }

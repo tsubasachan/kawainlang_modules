@@ -6,3 +6,82 @@
 🔌 🔢 kl_tcp_send(🔢 socket_fd, 🔡 data)
 🔌 🔡 kl_tcp_recv(🔢 socket_fd, 🔢 max_bytes)
 🔌 🔢 kl_tcp_close(🔢 socket_fd)
+🔌 🔢 kl_tcp_selecionar(🔢 socket_fd, 🔢 timeout_ms)
+
+🏛 ClienteTCP 🟢
+    🔢 fd = -1
+
+    🏗() 🟢
+    ✨
+
+    🎀 🔢 definir_fd(🔢 novo_fd) 🟢
+        🪞 🔎 fd = novo_fd
+        🔙 0
+    ✨
+
+    🎀 🔢 conectar(🔡 host, 🔢 port) 🟢
+        🪞 🔎 fd = kl_tcp_connect(host, port)
+        🔙 🪞 🔎 fd
+    ✨
+
+    🎀 🔢 enviar(🔡 dados) 🟢
+        🔢 res = kl_tcp_send(🪞 🔎 fd, dados)
+        🔙 res
+    ✨
+
+    🎀 🔡 receber(🔢 max_bytes) 🟢
+        🔡 res = kl_tcp_recv(🪞 🔎 fd, max_bytes)
+        🔙 res
+    ✨
+
+    🎀 ✅ pronto(🔢 timeout_ms) 🟢
+        🔢 res = kl_tcp_selecionar(🪞 🔎 fd, timeout_ms)
+        ❓ res 🤝 1 🟢
+            🔙 👍
+        ✨
+        🔙 👎
+    ✨
+
+    🎀 🔢 fechar() 🟢
+        🔢 res = kl_tcp_close(🪞 🔎 fd)
+        🪞 🔎 fd = -1
+        🔙 res
+    ✨
+✨
+
+🏛 ServidorTCP 🟢
+    🔢 fd = -1
+
+    🏗() 🟢
+    ✨
+
+    🎀 🔢 iniciar(🔡 host, 🔢 port) 🟢
+        🪞 🔎 fd = kl_tcp_bind(host, port)
+        ❓ 🪞 🔎 fd < 0 🟢
+            🔙 -1
+        ✨
+        🔢 res = kl_tcp_listen(🪞 🔎 fd, 16)
+        🔙 res
+    ✨
+
+    🎀 ClienteTCP aceitar() 🟢
+        🔢 cliente_fd = kl_tcp_accept(🪞 🔎 fd)
+        ClienteTCP cliente = 📜 ClienteTCP()
+        cliente 🔎 definir_fd(cliente_fd)
+        🔙 cliente
+    ✨
+
+    🎀 ✅ pronto(🔢 timeout_ms) 🟢
+        🔢 res = kl_tcp_selecionar(🪞 🔎 fd, timeout_ms)
+        ❓ res 🤝 1 🟢
+            🔙 👍
+        ✨
+        🔙 👎
+    ✨
+
+    🎀 🔢 fechar() 🟢
+        🔢 res = kl_tcp_close(🪞 🔎 fd)
+        🪞 🔎 fd = -1
+        🔙 res
+    ✨
+✨

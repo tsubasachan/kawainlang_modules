@@ -78,3 +78,14 @@ def kl_tcp_close(socket_fd):
         return 0
     except Exception:
         return -1
+
+
+def kl_tcp_selecionar(socket_fd, timeout_ms):
+    import select
+    try:
+        sock = _get(socket_fd)
+        r, _, _ = select.select([sock], [], [], float(timeout_ms) / 1000.0)
+        return 1 if r else 0
+    except Exception:
+        return -1
+
